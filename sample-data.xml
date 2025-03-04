@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <tables>
+    <!-- Original Table -->
+    <table id="original">
+      <cols>
+        <col id="1">ID</col>
+        <col id="2">Name</col>
+        <col id="3">Description</col>
+      </cols>
+      <rows>
+        <row id="1">
+          <col id="1">001</col>
+          <col id="2">Product A</col>
+          <col id="3">This is a description of product A</col>
+        </row>
+        <row id="2">
+          <col id="1">002</col>
+          <col id="2">Product B</col>
+          <col id="3">This is a description of product B</col>
+        </row>
+      </rows>
+    </table>
+    
+    <!-- Translated Table -->
+    <table id="translated">
+      <cols>
+        <col id="1">ID</col>
+        <col id="2">Nom</col>
+        <col id="3">Description</col>
+      </cols>
+      <rows>
+        <row id="1">
+          <col id="1">001</col>
+          <col id="2">Produit A</col>
+          <col id="3">Ceci est une description du produit A</col>
+        </row>
+        <row id="2">
+          <col id="1">002</col>
+          <col id="2">Produit B</col>
+          <col id="3">Ceci est une description du produit B</col>
+        </row>
+      </rows>
+    </table>
+  </tables>
+</document>
