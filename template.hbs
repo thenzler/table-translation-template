@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Table Translation Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+    }
+    
+    .comparison-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .table-pair {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .table-pair {
+        flex-direction: column;
+      }
+    }
+    
+    .table-container {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    
+    .table-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .not-translated {
+      background-color: #ffe6e6;
+    }
+    
+    .highlight-differences {
+      background-color: #ffffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Table Translation Comparison</h1>
+  
+  {{#each tables as |tablePair index|}}
+  <div class="comparison-container">
+    <h2>Table Set {{add index 1}}</h2>
+    
+    <div class="table-pair">
+      <!-- Original Table -->
+      <div class="table-container">
+        <div class="table-title">Original</div>
+        <table>
+          <thead>
+            <tr>
+              {{#each tablePair.original.cols as |col|}}
+              <th>{{col.content}}</th>
+              {{/each}}
+            </tr>
+          </thead>
+          <tbody>
+            {{#each tablePair.original.rows as |row|}}
+            <tr>
+              {{#each row.cols as |cell|}}
+              <td>{{cell.content}}</td>
+              {{/each}}
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Translated Table -->
+      <div class="table-container">
+        <div class="table-title">Translated</div>
+        <table>
+          <thead>
+            <tr>
+              {{#each tablePair.translated.cols as |col|}}
+              <th {{#unless col.isTranslated}}class="not-translated"{{/unless}}>{{col.content}}</th>
+              {{/each}}
+            </tr>
+          </thead>
+          <tbody>
+            {{#each tablePair.translated.rows as |row|}}
+            <tr>
+              {{#each row.cols as |cell|}}
+              <td {{#unless cell.isTranslated}}class="not-translated"{{/unless}}
+                  {{#if cell.isDifferent}}class="highlight-differences"{{/if}}>
+                {{cell.content}}
+              </td>
+              {{/each}}
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+  
+  <script>
+    // Helper function to detect differences between original and translated content
+    function detectDifferences() {
+      const tablePairs = document.querySelectorAll('.table-pair');
+      
+      tablePairs.forEach(pair => {
+        const originalCells = pair.querySelector('.table-container:first-child table').querySelectorAll('td');
+        const translatedCells = pair.querySelector('.table-container:last-child table').querySelectorAll('td');
+        
+        // Skip if the tables have different number of cells
+        if (originalCells.length !== translatedCells.length) return;
+        
+        for (let i = 0; i < originalCells.length; i++) {
+          if (originalCells[i].textContent === translatedCells[i].textContent) {
+            // Content is identical - might not be translated
+            if (!translatedCells[i].classList.contains('not-translated')) {
+              translatedCells[i].classList.add('not-translated');
+            }
+          }
+        }
+      });
+    }
+    
+    // Run after page load
+    window.addEventListener('DOMContentLoaded', detectDifferences);
+  </script>
+</body>
+</html>
